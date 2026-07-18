@@ -210,11 +210,13 @@
 
   function paintThumb(canvas, subject) {
     var dpr = window.devicePixelRatio || 1;
-    var size = 96;
-    canvas.style.width = size + 'px';
-    canvas.style.height = size + 'px';
-    canvas.width = Math.max(1, Math.round(size * dpr));
-    canvas.height = Math.max(1, Math.round(size * dpr));
+    // Fill the tile: size the backing store to the canvas's CSS-laid-out box
+    // (100% of the square thumb) so the mascot fills the whole tile.
+    var rect = canvas.getBoundingClientRect();
+    var w = rect.width || canvas.clientWidth || 96;
+    var h = rect.height || canvas.clientHeight || w;
+    canvas.width = Math.max(1, Math.round(w * dpr));
+    canvas.height = Math.max(1, Math.round(h * dpr));
     var ctx = canvas.getContext('2d');
     ctx.setTransform(canvas.width, 0, 0, canvas.height, 0, 0);
     ctx.clearRect(0, 0, 1, 1);
