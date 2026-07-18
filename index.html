@@ -9,13 +9,26 @@
 </head>
 <body>
 
+<div class="doodles" aria-hidden="true">
+  <span class="doodle doodle--ring"></span>
+  <span class="doodle doodle--dot"></span>
+  <span class="doodle doodle--tri"></span>
+  <span class="doodle doodle--ring2"></span>
+  <span class="doodle doodle--squiggle"></span>
+</div>
+
 <main class="app">
 
   <section id="screen-picker" class="screen">
     <div class="picker">
-      <p class="eyebrow eyebrow--badge">&#9998; Shape by Shape</p>
-      <h1 class="picker__title">Pick something to draw</h1>
+      <p class="eyebrow eyebrow--badge"><span class="badge-pencil">&#9998;</span> Shape by Shape</p>
+      <h1 class="picker__title">Pick something to <span class="title-accent">draw</span></h1>
       <p class="picker__sub">Five easy shapes, one step at a time. No drawing skill required.</p>
+      <ul class="chips">
+        <li class="chip">&#9998; Five easy steps</li>
+        <li class="chip">&#128101; Pass &amp; play</li>
+        <li class="chip">&#127881; Big reveal</li>
+      </ul>
       <div id="subject-buttons" class="subject-grid"></div>
     </div>
   </section>
@@ -23,6 +36,7 @@
   <section id="screen-draw" class="screen screen--hidden">
     <div class="draw-header">
       <p id="step-progress" class="step-progress">Step 1 of 5</p>
+      <div id="step-dots" class="step-dots" aria-hidden="true"></div>
       <p id="instruction-text" class="instruction-text">Follow along.</p>
     </div>
 
@@ -53,7 +67,7 @@
 
   <section id="screen-reveal" class="screen screen--hidden">
     <p class="eyebrow">Reveal</p>
-    <h2 class="reveal-title">Here is what you made</h2>
+    <h2 class="reveal-title">Ta-da! Here&rsquo;s what you made</h2>
     <div class="two-up reveal-anim">
       <div class="two-up__tile">
         <p class="two-up__label">Your drawing</p>

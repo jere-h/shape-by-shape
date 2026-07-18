@@ -27,7 +27,7 @@
   var elScreenPicker, elScreenDraw, elScreenReveal, elScreenCompare;
   var elSubjectButtons;
   var elReferenceCanvas, elPlayerCanvas;
-  var elInstructionText, elStepProgress;
+  var elInstructionText, elStepProgress, elStepDots;
   var elBtnBack, elBtnNext, elBtnUndo, elBtnClear;
   var elNudgeToast;
   var elRevealPlayerCanvas, elRevealReferenceCanvas;
@@ -63,6 +63,7 @@
 
     elInstructionText = document.getElementById('instruction-text');
     elStepProgress = document.getElementById('step-progress');
+    elStepDots = document.getElementById('step-dots');
 
     elBtnBack = document.getElementById('btn-back');
     elBtnNext = document.getElementById('btn-next');
@@ -344,6 +345,21 @@
       elStepProgress.textContent = 'Step ' + (session.currentStep + 1) + ' of ' + subject.steps.length;
     }
 
+    if (elStepDots) {
+      if (elStepDots.childElementCount !== subject.steps.length) {
+        elStepDots.innerHTML = '';
+        for (var d = 0; d < subject.steps.length; d++) {
+          var dot = document.createElement('span');
+          dot.className = 'step-dot';
+          elStepDots.appendChild(dot);
+        }
+      }
+      Array.prototype.forEach.call(elStepDots.children, function (dotEl, idx) {
+        dotEl.classList.toggle('step-dot--done', idx < session.currentStep);
+        dotEl.classList.toggle('step-dot--active', idx === session.currentStep);
+      });
+    }
+
     var atStart = session.currentStep === 0;
     if (elBtnBack) {
       elBtnBack.disabled = atStart;
@@ -513,10 +529,45 @@
   // Reveal / pass / compare / restart transitions
   // ---------------------------------------------------------------------
 
+  // ---------------------------------------------------------------------
+  // Confetti (celebration; skipped under prefers-reduced-motion)
+  // ---------------------------------------------------------------------
+
+  var CONFETTI_COLORS = ['#e8557f', '#f0b43c', '#4f96f0', '#58c08b'];
+
+  function burstConfetti() {
+    var allowMotion = false;
+    try {
+      allowMotion = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+    } catch (err) {
+      allowMotion = false;
+    }
+    if (!allowMotion) return;
+
+    var holder = document.createElement('div');
+    holder.className = 'confetti';
+    holder.setAttribute('aria-hidden', 'true');
+    for (var i = 0; i < 28; i++) {
+      var bit = document.createElement('span');
+      bit.className = 'confetti__bit';
+      bit.style.left = (Math.random() * 100) + '%';
+      bit.style.background = CONFETTI_COLORS[i % CONFETTI_COLORS.length];
+      bit.style.animationDelay = (Math.random() * 0.35).toFixed(2) + 's';
+      bit.style.animationDuration = (1.1 + Math.random() * 0.9).toFixed(2) + 's';
+      bit.style.setProperty('--drift', (Math.random() * 160 - 80).toFixed(0) + 'px');
+      holder.appendChild(bit);
+    }
+    document.body.appendChild(holder);
+    setTimeout(function () {
+      if (holder.parentNode) holder.parentNode.removeChild(holder);
+    }, 2600);
+  }
+
   function goReveal() {
     session.player1Snapshot = snapshotStrokes(session.strokes);
     session.screen = 'reveal';
     render();
+    burstConfetti();
   }
 
   function drawScreenReveal() {
@@ -554,6 +605,7 @@
     session.player2Snapshot = snapshotStrokes(session.strokes);
     session.screen = 'compare';
     render();
+    burstConfetti();
   }
 
   function drawScreenCompare() {

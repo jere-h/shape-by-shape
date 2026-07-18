@@ -135,6 +135,89 @@ a {
   margin: 0 auto;
   padding: var(--space-5) var(--space-4) var(--space-6);
   width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Floating background doodles ---------- */
+
+.doodles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.doodle {
+  position: absolute;
+  opacity: 0.35;
+}
+
+.doodle--ring {
+  width: 52px;
+  height: 52px;
+  border: 3px solid var(--color-accent);
+  border-radius: 50%;
+  top: 14%;
+  left: 7%;
+}
+
+.doodle--ring2 {
+  width: 34px;
+  height: 34px;
+  border: 3px solid var(--color-sky);
+  border-radius: 50%;
+  bottom: 18%;
+  right: 9%;
+}
+
+.doodle--dot {
+  width: 18px;
+  height: 18px;
+  background: var(--color-sun);
+  border-radius: 50%;
+  top: 22%;
+  right: 12%;
+}
+
+.doodle--tri {
+  width: 34px;
+  height: 34px;
+  background: var(--color-sky);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  bottom: 22%;
+  left: 10%;
+  opacity: 0.25;
+}
+
+.doodle--squiggle {
+  width: 56px;
+  height: 14px;
+  top: 44%;
+  right: 4%;
+  /* hand-drawn wave built from two stacked radial strokes */
+  background: radial-gradient(circle at 25% 0, transparent 8px, var(--color-accent) 8px, var(--color-accent) 11px, transparent 11px),
+    radial-gradient(circle at 75% 100%, transparent 8px, var(--color-accent) 8px, var(--color-accent) 11px, transparent 11px);
+  background-size: 28px 14px;
+  background-repeat: repeat-x;
+  opacity: 0.25;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .doodle {
+    animation: doodle-float 8s ease-in-out infinite alternate;
+  }
+
+  .doodle--dot { animation-duration: 7s; animation-delay: -2s; }
+  .doodle--tri { animation-duration: 9s; animation-delay: -4s; }
+  .doodle--ring2 { animation-duration: 6.5s; animation-delay: -1s; }
+  .doodle--squiggle { animation-duration: 10s; animation-delay: -3s; }
+}
+
+@keyframes doodle-float {
+  from { transform: translateY(-10px) rotate(-5deg); }
+  to { transform: translateY(12px) rotate(7deg); }
 }
 
 .screen {
@@ -176,6 +259,23 @@ a {
   border: 1px solid transparent;
 }
 
+.badge-pencil {
+  display: inline-block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .badge-pencil {
+    animation: pencil-wiggle 3s ease-in-out infinite;
+    transform-origin: 30% 80%;
+  }
+}
+
+@keyframes pencil-wiggle {
+  0%, 30%, 100% { transform: rotate(0); }
+  8% { transform: rotate(-14deg); }
+  18% { transform: rotate(10deg); }
+}
+
 .step-progress {
   font-family: var(--font-mono);
   text-transform: uppercase;
@@ -207,11 +307,39 @@ a {
   margin-top: var(--space-2);
 }
 
+.title-accent {
+  background: linear-gradient(94deg, var(--color-accent), var(--color-sun));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 .picker__sub {
   color: var(--color-muted);
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--space-2);
   max-width: 46ch;
   font-size: 1.05rem;
+}
+
+.chips {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 0;
+  margin: 0 0 var(--space-5);
+}
+
+.chip {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  padding: var(--space-1) var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-sm);
 }
 
 .subject-grid {
@@ -252,6 +380,23 @@ a {
 .subject-card:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .subject-card {
+    animation: card-pop 0.5s cubic-bezier(0.32, 0.72, 0, 1) backwards;
+  }
+
+  .subject-card:nth-child(2) { animation-delay: 0.08s; }
+  .subject-card:nth-child(3) { animation-delay: 0.16s; }
+  .subject-card:nth-child(4) { animation-delay: 0.24s; }
+}
+
+@keyframes card-pop {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
 }
 
 .subject-card__thumb {
@@ -344,13 +489,41 @@ a {
 
 .draw-header {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
   margin-bottom: var(--space-5);
+}
+
+.step-dots {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.step-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color-border);
+  transition: background-color 0.2s cubic-bezier(0.32, 0.72, 0, 1),
+    transform 0.2s cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.step-dot--done {
+  background: var(--color-accent);
+  opacity: 0.45;
+}
+
+.step-dot--active {
+  background: var(--color-accent);
+  transform: scale(1.35);
 }
 
 .instruction-text {
   font-size: 1.1rem;
+  font-weight: 500;
+  flex-basis: 100%;
 }
 
 .draw-area {
@@ -380,7 +553,23 @@ a {
 .draw-area__reference .eyebrow,
 .draw-area__player .eyebrow {
   margin-bottom: var(--space-2);
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.draw-area__reference .eyebrow::before,
+.draw-area__player .eyebrow::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-sun);
+  flex: none;
+}
+
+.draw-area__player .eyebrow::before {
+  background: var(--color-accent);
 }
 
 .draw-controls {
@@ -477,6 +666,33 @@ a {
   justify-content: center;
   gap: var(--space-3);
   margin-top: var(--space-5);
+}
+
+/* ---------- Confetti ---------- */
+
+.confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.confetti__bit {
+  position: absolute;
+  top: -4vh;
+  width: 8px;
+  height: 14px;
+  border-radius: 2px;
+  opacity: 0.95;
+  animation: confetti-fall 1.4s ease-in forwards;
+}
+
+@keyframes confetti-fall {
+  to {
+    transform: translate(var(--drift, 0px), 110vh) rotate(560deg);
+    opacity: 0.8;
+  }
 }
 
 /* ---------- Reveal / entrance animation ---------- */
