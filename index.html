@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shape by Shape</title>
+<meta name="description" content="A pass-and-play draw-along game: build a cartoon dog or cat step by step, then compare with a friend.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<main class="app">
+
+  <section id="screen-picker" class="screen">
+    <div class="picker">
+      <p class="eyebrow">Shape by Shape</p>
+      <h1 class="picker__title">Pick something to draw</h1>
+      <p class="picker__sub">Five easy shapes, one step at a time. No drawing skill required.</p>
+      <div id="subject-buttons" class="subject-grid"></div>
+    </div>
+  </section>
+
+  <section id="screen-draw" class="screen screen--hidden">
+    <div class="draw-header">
+      <p id="step-progress" class="step-progress">Step 1 of 5</p>
+      <p id="instruction-text" class="instruction-text">Follow along.</p>
+    </div>
+
+    <div class="draw-area">
+      <div class="draw-area__reference">
+        <p class="eyebrow">Reference</p>
+        <canvas id="reference-canvas" width="300" height="300"></canvas>
+      </div>
+      <div class="draw-area__player">
+        <p class="eyebrow">Your drawing</p>
+        <canvas id="player-canvas" width="300" height="300"></canvas>
+      </div>
+    </div>
+
+    <div id="nudge-toast" class="nudge" role="status" aria-live="polite">Draw something first, even a rough shape works.</div>
+
+    <div class="draw-controls">
+      <div class="draw-controls__group">
+        <button id="btn-undo" type="button" class="btn btn--secondary">Undo</button>
+        <button id="btn-clear" type="button" class="btn btn--secondary">Clear</button>
+      </div>
+      <div class="draw-controls__group">
+        <button id="btn-back" type="button" class="btn btn--secondary btn--disabled" disabled>Back</button>
+        <button id="btn-next" type="button" class="btn btn--primary">Next</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="screen-reveal" class="screen screen--hidden">
+    <p class="eyebrow">Reveal</p>
+    <h2 class="reveal-title">Here is what you made</h2>
+    <div class="two-up reveal-anim">
+      <div class="two-up__tile">
+        <p class="two-up__label">Your drawing</p>
+        <canvas id="reveal-player-canvas" width="300" height="300"></canvas>
+      </div>
+      <div class="two-up__tile">
+        <p class="two-up__label">Full reference</p>
+        <canvas id="reveal-reference-canvas" width="300" height="300"></canvas>
+      </div>
+    </div>
+    <div class="reveal-actions">
+      <button id="btn-pass" type="button" class="btn btn--primary">Pass to a friend</button>
+      <button id="btn-reveal-again" type="button" class="btn btn--secondary">Draw another</button>
+    </div>
+  </section>
+
+  <section id="screen-compare" class="screen screen--hidden">
+    <p class="eyebrow">Compare</p>
+    <h2 class="compare-title">Two takes, side by side</h2>
+    <div class="two-up reveal-anim">
+      <div class="two-up__tile">
+        <p class="two-up__label">Player 1</p>
+        <img id="compare-img-1" alt="Player 1's drawing">
+      </div>
+      <div class="two-up__tile">
+        <p class="two-up__label">Player 2</p>
+        <img id="compare-img-2" alt="Player 2's drawing">
+      </div>
+    </div>
+    <div class="compare-actions">
+      <button id="btn-compare-again" type="button" class="btn btn--primary">Draw another</button>
+    </div>
+  </section>
+
+</main>
+
+<script src="subjects.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
