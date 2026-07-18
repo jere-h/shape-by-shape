@@ -37,18 +37,21 @@
     <div class="draw-header">
       <p id="step-progress" class="step-progress">Step 1 of 5</p>
       <div id="step-dots" class="step-dots" aria-hidden="true"></div>
-      <p id="instruction-text" class="instruction-text">Follow along.</p>
     </div>
 
-    <div class="draw-area">
-      <div class="draw-area__reference">
-        <p class="eyebrow">Reference</p>
+    <div class="draw-guide">
+      <span class="draw-guide__thumb">
         <canvas id="reference-canvas" width="300" height="300"></canvas>
+      </span>
+      <div class="draw-guide__text">
+        <p class="eyebrow">Reference</p>
+        <p id="instruction-text" class="instruction-text">Follow along.</p>
       </div>
-      <div class="draw-area__player">
-        <p class="eyebrow">Your drawing</p>
-        <canvas id="player-canvas" width="300" height="300"></canvas>
-      </div>
+    </div>
+
+    <div class="draw-area__player">
+      <p class="eyebrow">Your drawing</p>
+      <canvas id="player-canvas" width="300" height="300"></canvas>
     </div>
 
     <div id="nudge-toast" class="nudge" role="status" aria-live="polite">Draw something first, even a rough shape works.</div>

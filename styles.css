@@ -565,45 +565,48 @@ a {
   transform: scale(1.35);
 }
 
-.instruction-text {
-  font-size: 1.1rem;
-  font-weight: 500;
-  flex-basis: 100%;
-}
-
-.draw-area {
+/* Guide card: compact reference thumb + the step instruction, side by side.
+   Keeps the "what to draw" and "where to draw" both on screen at once. */
+.draw-guide {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: var(--space-4);
-}
-
-.draw-area__reference,
-.draw-area__player {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   padding: var(--space-3);
+  margin-bottom: var(--space-4);
 }
 
-.draw-area__reference canvas,
-.draw-area__player canvas {
+.draw-guide__thumb {
+  flex: none;
+  display: block;
+  width: 132px;
+}
+
+.draw-guide__thumb canvas {
   width: 100%;
   aspect-ratio: 1 / 1;
   background: var(--color-sand);
   border-radius: var(--radius);
-  touch-action: none;
 }
 
-.draw-area__reference .eyebrow,
+.draw-guide__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.draw-guide .eyebrow,
 .draw-area__player .eyebrow {
-  margin-bottom: var(--space-2);
   display: flex;
   align-items: center;
   gap: var(--space-2);
 }
 
-.draw-area__reference .eyebrow::before,
+.draw-guide .eyebrow::before,
 .draw-area__player .eyebrow::before {
   content: "";
   width: 8px;
@@ -615,6 +618,37 @@ a {
 
 .draw-area__player .eyebrow::before {
   background: var(--color-accent);
+}
+
+.instruction-text {
+  font-size: 1.05rem;
+  font-weight: 500;
+  min-height: 2.6em;
+}
+
+/* Player canvas card: canvas is height-capped so the card, guide, and
+   controls all fit one viewport instead of forcing scroll-to-draw. */
+.draw-area__player {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-3);
+}
+
+.draw-area__player .eyebrow {
+  margin-bottom: var(--space-2);
+}
+
+.draw-area__player canvas {
+  display: block;
+  margin: 0 auto;
+  width: min(100%, max(220px, calc(100vh - 420px)));
+  width: min(100%, max(220px, calc(100dvh - 420px)));
+  aspect-ratio: 1 / 1;
+  background: var(--color-sand);
+  border-radius: var(--radius);
+  touch-action: none;
 }
 
 .draw-controls {
@@ -630,6 +664,65 @@ a {
   display: flex;
   gap: var(--space-3);
   flex-wrap: wrap;
+}
+
+/* ---------- Mobile draw screen: everything on one screen ---------- */
+
+@media (max-width: 719px) {
+  .draw-header {
+    margin-bottom: var(--space-3);
+  }
+
+  .draw-guide__thumb {
+    width: 104px;
+  }
+
+  .instruction-text {
+    font-size: 0.98rem;
+  }
+
+  .draw-area__player canvas {
+    width: min(100%, max(200px, calc(100vh - 372px)));
+    width: min(100%, max(200px, calc(100dvh - 372px)));
+  }
+
+  /* Reserve room for the fixed control bar (the .app bottom padding
+     already contributes ~40px on top of this). */
+  #screen-draw {
+    padding-bottom: 44px;
+  }
+
+  .draw-controls {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin-top: 0;
+    padding: var(--space-3) var(--space-4) calc(var(--space-3) + env(safe-area-inset-bottom));
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    box-shadow: 0 -4px 16px rgba(2, 6, 13, 0.08);
+    z-index: 20;
+    flex-wrap: nowrap;
+  }
+
+  .draw-controls__group {
+    flex-wrap: nowrap;
+    gap: var(--space-2);
+  }
+
+  .draw-controls .btn {
+    padding-left: var(--space-3);
+    padding-right: var(--space-3);
+  }
+
+  #btn-next {
+    min-width: 96px;
+  }
+
+  .nudge {
+    bottom: calc(92px + env(safe-area-inset-bottom));
+  }
 }
 
 /* ---------- Nudge toast ---------- */
@@ -761,22 +854,9 @@ a {
   }
 }
 
-/* ---------- Wide breakpoint: reference-beside-canvas / side-by-side two-up ---------- */
+/* ---------- Wide breakpoint: side-by-side two-up ---------- */
 
 @media (min-width: 720px) {
-  .draw-area {
-    flex-direction: row;
-    align-items: flex-start;
-  }
-
-  .draw-area__reference {
-    flex: 0 0 38%;
-  }
-
-  .draw-area__player {
-    flex: 1 1 auto;
-  }
-
   .two-up {
     flex-direction: row;
   }
