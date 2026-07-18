@@ -864,4 +864,20 @@ a {
   .two-up__tile {
     flex: 1 1 0;
   }
+
+  /* Desktop draw screen: the drawable field is square (it shares the
+     reference's 0..1 coordinate space), so on a wide screen it can only grow
+     as tall as the viewport allows. Left in a full-width card it sat as a
+     small centered square with large dead bands of empty card on either side.
+     Collapse the player card to hug that square so the canvas fills it edge to
+     edge, while the guide and controls keep their full width. */
+  #screen-draw .draw-area__player {
+    width: min(100%, max(240px, calc(100vh - 404px)));
+    width: min(100%, max(240px, calc(100dvh - 404px)));
+    margin-inline: auto;
+  }
+
+  #screen-draw .draw-area__player canvas {
+    width: 100%;
+  }
 }
