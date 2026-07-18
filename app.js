@@ -181,32 +181,69 @@
   // Picker screen
   // ---------------------------------------------------------------------
 
+  function makeSubjectCard(id, subject) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'subject-card';
+    btn.setAttribute('data-subject-id', id);
+
+    var thumb = document.createElement('span');
+    thumb.className = 'subject-card__thumb';
+    var canvas = document.createElement('canvas');
+    thumb.appendChild(canvas);
+
+    var label = document.createElement('span');
+    label.className = 'subject-card__label';
+    label.textContent = subject.label;
+
+    var meta = document.createElement('span');
+    meta.className = 'subject-card__meta';
+    meta.textContent = subject.steps.length + ' steps';
+
+    btn.appendChild(thumb);
+    btn.appendChild(label);
+    btn.appendChild(meta);
+    return btn;
+  }
+
   function buildSubjectButtons() {
     if (!elSubjectButtons || !window.SBS.SUBJECTS) return;
     elSubjectButtons.innerHTML = '';
-    Object.keys(window.SBS.SUBJECTS).forEach(function (id) {
-      var subject = window.SBS.SUBJECTS[id];
 
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'subject-card';
-      btn.setAttribute('data-subject-id', id);
+    var subjects = window.SBS.SUBJECTS;
+    var categories = window.SBS.CATEGORIES || [{ id: null, label: '', hint: '' }];
 
-      var thumb = document.createElement('span');
-      thumb.className = 'subject-card__thumb';
-      var canvas = document.createElement('canvas');
-      thumb.appendChild(canvas);
+    categories.forEach(function (cat) {
+      var ids = Object.keys(subjects).filter(function (id) {
+        return !cat.id || subjects[id].category === cat.id;
+      });
+      if (!ids.length) return;
 
-      var label = document.createElement('span');
-      label.className = 'subject-card__label';
-      label.textContent = subject.label;
+      var section = document.createElement('section');
+      section.className = 'subject-section';
 
-      btn.appendChild(thumb);
-      btn.appendChild(label);
-      elSubjectButtons.appendChild(btn);
+      if (cat.label) {
+        var head = document.createElement('h2');
+        head.className = 'subject-section__title';
+        head.textContent = cat.label;
+        var hint = document.createElement('span');
+        hint.className = 'subject-section__hint';
+        hint.textContent = cat.hint;
+        head.appendChild(hint);
+        section.appendChild(head);
+      }
 
-      paintThumb(canvas, subject);
+      var grid = document.createElement('div');
+      grid.className = 'subject-grid';
+      ids.forEach(function (id) {
+        grid.appendChild(makeSubjectCard(id, subjects[id]));
+      });
+      section.appendChild(grid);
+      elSubjectButtons.appendChild(section);
     });
+
+    // Paint after everything is attached so each canvas has a laid-out size.
+    repaintThumbs();
   }
 
   function paintThumb(canvas, subject) {

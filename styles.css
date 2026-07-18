@@ -342,21 +342,56 @@ a {
   box-shadow: var(--shadow-sm);
 }
 
+.subject-sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  width: 100%;
+  max-width: 640px;
+}
+
+.subject-section__title {
+  font-size: 1.15rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.subject-section__hint {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--color-muted);
+  padding: 2px var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+}
+
 .subject-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--space-4);
   width: 100%;
-  max-width: 520px;
+}
+
+@media (max-width: 480px) {
+  .subject-grid {
+    gap: var(--space-3);
+  }
 }
 
 .subject-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
   min-height: 44px;
-  padding: var(--space-4);
+  padding: var(--space-3);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -421,7 +456,15 @@ a {
 
 .subject-card__label {
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1rem;
+}
+
+.subject-card__meta {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.68rem;
+  color: var(--color-muted);
 }
 
 /* ---------- Buttons ---------- */
@@ -497,12 +540,14 @@ a {
 
 .step-dots {
   display: flex;
-  gap: var(--space-2);
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: 360px;
 }
 
 .step-dot {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--color-border);
   transition: background-color 0.2s cubic-bezier(0.32, 0.72, 0, 1),
